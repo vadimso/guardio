@@ -1,9 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
+from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
 import requests
 import csv
 import os
 
 app = Flask(__name__)
+REQUEST_COUNT = Counter('pokeapi_requests_total', 'Total number of requests to /pokemon', ['pokemon_name'])
 
 POKEAPI_URL = "https://pokeapi.co/api/v2/pokemon/"
 
@@ -57,3 +59,7 @@ def get_pokemon():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
+
+@app.route("/metrics")
+def metrics():
+    return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
