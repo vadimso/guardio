@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-deployment
+  labels:
+    app: pokeapi-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pokeapi-app
+  template:
+    metadata:
+      labels:
+        app: pokeapi-app
+    spec:
+      containers:
+      - name: pokeapi-flask-container
+        image: vadimso/pokeapi-flask-app:latest
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            cpu: "100m"
+          limits:
+            cpu: "500m"
