@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and push Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/pokeapi-flask-app:latest .
+        docker push ${{ secrets.DOCKER_USERNAME }}/pokeapi-flask-app:latest
+
+    - name: Update image in Kubernetes
+      run: |
+        kubectl set image deployment/server-deployment \
+          pokeapi-flask-container=${{ secrets.DOCKER_USERNAME }}/pokeapi-flask-app:latest
+        kubectl rollout status deployment/server-deployment
