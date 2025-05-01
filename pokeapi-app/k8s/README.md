@@ -21,8 +21,10 @@ kubectl -n monitoring patch deployment prometheus-deployment \
 
 # install grafana
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
+
 helm install grafana grafana/grafana \
   --namespace monitoring --create-namespace \
   --set adminPassword='admin' \
