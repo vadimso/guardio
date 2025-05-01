@@ -11,3 +11,4 @@ Containerized with Docker
 Deployed to a Kubernetes cluster (e.g., Minikube)
 Autoscaled with Horizontal Pod Autoscaler (HPA)
 Automated CI/CD pipeline via GitHub Actions
+Monitoring with Grafana & Prometheus
