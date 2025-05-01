@@ -1,1 +1,7 @@
 
+
+# run this command to patch prometheus to load the prometheus config
+kubectl -n monitoring patch deployment prometheus-deployment \
+  --type=json \
+  -p='[{"op": "add", "path": "/spec/template/spec/volumes/-", "value":{"name":"additional-configs","configMap":{"name":"prometheus-additional-config"}}},
+       {"op": "add", "path": "/spec/template/spec/containers/0/volumeMounts/-", "value":{"name":"additional-configs","mountPath":"/etc/prometheus/additional-scrape-configs"}}]'
